@@ -18,7 +18,11 @@ from os.path import join
 
 color = (30, 240, 230)
 
-face_cascade = cv2.CascadeClassifier('model/haarcascade_frontalface_default.xml')
+weights_file = 'model/vgg_face_weights.h5'
+face_haar_file = 'model/haarcascade_frontalface_default.xml'
+db_dir = 'face_db/'
+
+face_cascade = cv2.CascadeClassifier(face_haar_file)
 
 def preprocess_image(image_path):
     img = load_img(image_path, target_size=(224, 224))
@@ -75,7 +79,7 @@ def loadVggFaceModel():
 	
 	#you can download pretrained weights from https://drive.google.com/file/d/1CPSeum3HpopfomUEK1gybeuIVoeJT_Eo/view?usp=sharing
 	from keras.models import model_from_json
-	model.load_weights('model/vgg_face_weights.h5')
+	model.load_weights(weights_file)
 	
 	vgg_face_descriptor = Model(inputs=model.layers[0].input, outputs=model.layers[-2].output)
 	
@@ -86,7 +90,7 @@ model = loadVggFaceModel()
 #------------------------
 
 #put your employee pictures in this path as name_of_employee.jpg
-employee_pictures = "face_db/"
+employee_pictures = db_dir
 
 employees = dict()
 
